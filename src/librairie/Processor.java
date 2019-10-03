@@ -16,7 +16,7 @@ public class Processor extends AtomicComponent
 		if(State == 0 && Inputs.get("req")==1)
 		{
 			State=1;
-			tr=3;
+			//tr=3;
 			this.setInputs("req",0.0);
 		}
 	}
@@ -25,7 +25,7 @@ public class Processor extends AtomicComponent
 		if(State == 1)
 		{
 			State=0;
-			tr=Double.MAX_VALUE;
+			//tr=Double.MAX_VALUE;
 		}
 			
 	}

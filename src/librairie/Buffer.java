@@ -18,33 +18,33 @@ public class Buffer extends AtomicComponent{
 		{
 			State=1;
 			q++;
-			tr=0;
+			//tr=0;
 			this.setInputs("job",0.0);
 		}
 		else if(State==1 && Inputs.get("job")==1)
 		{	
 			State=1;
-			tr=0;
+			//tr=0;
 			q++;
 			this.setInputs("job",0.0);
 		}
 		else if(State==2 && Inputs.get("job")==1)
 		{	
 			State=2;
-			tr=Double.MAX_VALUE;
+			//tr=Double.MAX_VALUE;
 			q++;
 			this.setInputs("job",0.0);
 		}
 		else if(State==2 && Inputs.get("done")==1 && q>0)
 		{	
 			State=1;
-			tr=0;
+			//tr=0;
 			this.setInputs("done",0.0);
 		}
 		else if(State==2 && Inputs.get("done")==1 && q==0)
 		{	
 			State=0;
-			tr=Double.MAX_VALUE;
+			//tr=Double.MAX_VALUE;
 			this.setInputs("done",0.0);
 		}
 	}
@@ -55,7 +55,7 @@ public class Buffer extends AtomicComponent{
 		{
 			State=2;
 			q--;
-			tr=Double.MAX_VALUE;
+			//tr=Double.MAX_VALUE;
 		}
 	}
 

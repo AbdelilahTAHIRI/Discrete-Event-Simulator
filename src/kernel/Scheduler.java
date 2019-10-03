@@ -1,10 +1,13 @@
 package kernel;
-//modif
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import chart.Chart;
+import chart.ChartFrame;
 import librairie.Buffer;
+import librairie.Adder;
 import librairie.AtomicComponent;
 
 public class Scheduler 
@@ -12,26 +15,32 @@ public class Scheduler
 	public void run(ArrayList<AtomicComponent> modele)
 	{
 		double t=0;
-		double Tfin=10;
+		double Tfin=1.5;
 		ArrayList<AtomicComponent> Imms=new ArrayList<AtomicComponent>();
 		double TrMin=Double.MAX_VALUE;
 		HashMap<String,Double> sortie= new HashMap<String,Double>();
-		String Key = null;
-		Double Value= null;
+		String Key=null;
+		Double Value=null;
 		//for(AtomicComponent c : modele)
 		//{
 			//c.setTr(c.getTn());
 		//}
+		
+		ChartFrame gui= new ChartFrame("Steps Adder","Steps Adder");
+		Chart  cq= new Chart("Sum");
+		gui.addToLineChartPane(cq);
+		
 		while(t<=Tfin)
 		{
 			System.out.println("t="+t);
-			System.out.println("q="+((Buffer)modele.get(1)).getQ());
+			//System.out.println("q="+((Buffer)modele.get(1)).getQ());
+			cq.addDataToSeries(t,((Adder)modele.get(4)).getSum());
 			//Determiner le Tr min
 			for(AtomicComponent c : modele)
 			{
 				TrMin=Math.min(TrMin, c.getTr());
 			}
-			//System.out.println("TrMin="+TrMin);
+			System.out.println("TrMin="+TrMin);
 			
 			//Construction de l'ensemble Imms
 			for(AtomicComponent c : modele)
@@ -52,7 +61,6 @@ public class Scheduler
 					   System.out.println(Key+"|"+TrMin);
 				}
 				
-				
 				for(AtomicComponent c : modele)
 				{
 					if((c.getInputs()).containsKey(Key))
@@ -72,7 +80,7 @@ public class Scheduler
 					
 					//internal method updates Tr date
 					c.internal();
-					
+					c.setTr(c.avancement());
 					//mise à jour des autres variables temps
 					c.setE(0);
 					c.setTl(t+TrMin);
@@ -82,7 +90,8 @@ public class Scheduler
 				else if(!(Imms.contains(c)) && c.isIns())
 				{
 					//System.out.println("external");
-					c.external();//external method updates Tr Attribute
+					c.external();
+					c.setTr(c.avancement());//external method updates Tr Attribute
 					c.setE(0);
 					c.setTl(t+TrMin);
 					c.setTn(t+TrMin+c.getTr());
@@ -91,9 +100,11 @@ public class Scheduler
 				else if((Imms.contains(c)) && c.isIns())
 				{
 					c.conflict();
-					c.setE(0);
-					c.setTl(t+TrMin);
-					c.setTn(t+TrMin+c.getTr());
+					c.setE(c.getTr()+c.getE());
+					c.setTr(0);
+					
+					//c.setTl(t+TrMin);
+					//c.setTn(t+TrMin+c.getTr());
 					c.setIns(false);
 				}
 				else
@@ -104,14 +115,13 @@ public class Scheduler
 					//c.setTl(t+TrMin+c.getTl());
 					//c.setTn(t+TrMin+c.getTr());
 					c.setIns(false);
-				}
-				
+				}				
 			}
 			Imms.clear();
 			t=t+TrMin;
 			TrMin=Double.MAX_VALUE;
-			System.out.println("----------------------------------------------");
-			System.out.println("----------------------------------------------");
+			//System.out.println("----------------------------------------------");
+			//System.out.println("----------------------------------------------");
 		}
 	}
 }
