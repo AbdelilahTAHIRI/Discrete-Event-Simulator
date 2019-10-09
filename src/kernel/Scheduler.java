@@ -8,6 +8,8 @@ import chart.Chart;
 import chart.ChartFrame;
 import librairie.Buffer;
 import librairie.Adder;
+import librairie.Integrator;
+import librairie.DEI;
 import librairie.AtomicComponent;
 
 public class Scheduler 
@@ -15,7 +17,7 @@ public class Scheduler
 	public void run(ArrayList<AtomicComponent> modele)
 	{
 		double t=0;
-		double Tfin=1.5;
+		double Tfin=3;
 		ArrayList<AtomicComponent> Imms=new ArrayList<AtomicComponent>();
 		double TrMin=Double.MAX_VALUE;
 		HashMap<String,Double> sortie= new HashMap<String,Double>();
@@ -26,15 +28,21 @@ public class Scheduler
 			//c.setTr(c.getTn());
 		//}
 		
-		ChartFrame gui= new ChartFrame("Steps Adder","Steps Adder");
-		Chart  cq= new Chart("Sum");
+		ChartFrame gui= new ChartFrame("Steps Adder Integrator","Steps Adder Integrator");
+		Chart  cq= new Chart("X");
+		Chart  cqDEI= new Chart("XDEI");
+		Chart  Sum=new Chart("Sum");
 		gui.addToLineChartPane(cq);
+		gui.addToLineChartPane(cqDEI);
+		gui.addToLineChartPane(Sum);
 		
 		while(t<=Tfin)
 		{
 			System.out.println("t="+t);
 			//System.out.println("q="+((Buffer)modele.get(1)).getQ());
-			cq.addDataToSeries(t,((Adder)modele.get(4)).getSum());
+			cq.addDataToSeries(t,((Integrator)modele.get(5)).getX());
+			cqDEI.addDataToSeries(t,((DEI)modele.get(6)).getX());
+			Sum.addDataToSeries(t,((Adder)modele.get(4)).getSum());
 			//Determiner le Tr min
 			for(AtomicComponent c : modele)
 			{
@@ -58,7 +66,7 @@ public class Scheduler
 				{
 					   Key = entry.getKey();
 					   Value = entry.getValue();
-					   System.out.println(Key+"|"+TrMin);
+					   //System.out.println(Key+"|"+TrMin);
 				}
 				
 				for(AtomicComponent c : modele)

@@ -44,8 +44,7 @@ public class Step extends AtomicComponent {
 		else if(State==2)
 		{
 			State=2;
-		}
-			
+		}		
 	}
 	
 	public HashMap<String, Double> lambda()// fonction de sortie

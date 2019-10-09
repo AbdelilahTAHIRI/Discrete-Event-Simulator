@@ -73,19 +73,21 @@ public abstract class AtomicComponent
 		return Outputs;
 	}
 
-	public void setOutputs(HashMap<String, Double> outputs) {
-		Outputs = outputs;
+	public void setOutputs(String Key, Double Value) {
+		Outputs.put(Key, Value);
 	}
 
 	public boolean isIns() {
 		return ins;
 	}
 
-	public void setIns(boolean ins) {
+	public void setIns(boolean ins) 
+	{
 		this.ins = ins;
 	}
 
-	public void conflict() {
+	public void conflict() 
+	{
 		System.out.println("conflit");
 	}
 }
